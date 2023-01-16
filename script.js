@@ -16,6 +16,26 @@ navigator.geolocation.getCurrentPosition(success, error)
 let planetData = []
 let planetDataPre = []
 let aries
+let sunImg = new Image()
+let moonImg = new Image()
+let mercuryImg = new Image()
+let venusImg = new Image()
+let marsImg = new Image()
+let jupiterImg = new Image()
+let saturnImg = new Image()
+let uranusImg = new Image()
+let neptuneImg = new Image()
+let plutoImg = new Image()
+sunImg.src = './images/sun.png'
+moonImg.src = './images/moon.png'
+mercuryImg.src = './images/mercury.jpg'
+venusImg.src = './images/venus.png'
+marsImg.src = './images/mars.jpg'
+jupiterImg.src = './images/jupiter.png'
+saturnImg.src = './images/saturn.jpg'
+uranusImg.src = './images/uranus.jpg'
+neptuneImg.src = './images/neptune.png'
+plutoImg.src = './images/pluto.jpg'
 
 async function getData(latitude, longitude) {
   let planetData = []
@@ -50,16 +70,16 @@ async function getData(latitude, longitude) {
   const endpoint = 'https://ssd.jpl.nasa.gov/api/horizons.api';
   const queryString = `?format=text&COMMAND='199'&OBJ_DATA='YES'&MAKE_EPHEM='YES'&EPHEM_TYPE='OBSERVER'&CENTER='c@399'&SITE_COORD='${longitude},${latitude},0'&START_TIME='${currentTimeStr}'&STOP_TIME='${currentTimeStr2}'&STEP_SIZE='1%20d'&QUANTITIES='1,34'`;
   const planets = [
-    { name: 'Sun', id: '10', color: 'yellow' },
-    { name: 'Moon', id: '301', color: 'grey' },
-    { name: 'Mercury', id: '199', color: 'orange' },
-    { name: 'Venus', id: '299', color: 'green' },
-    { name: 'Mars', id: '499', color: 'red' },
-    { name: 'Jupiter', id: '599', color: 'blue' },
-    { name: 'Saturn', id: '699', color: 'purple' },
-    { name: 'Uranus', id: '799', color: 'silver' },
-    { name: 'Neptune', id: '899', color: 'pink' },
-    { name: 'Pluto', id: '999', color: 'black' },
+    { name: 'Sun', id: '10', color: 'yellow', img: sunImg },
+    { name: 'Moon', id: '301', color: 'grey', img: moonImg },
+    { name: 'Mercury', id: '199', color: 'orange', img: mercuryImg },
+    { name: 'Venus', id: '299', color: 'green', img: venusImg },
+    { name: 'Mars', id: '499', color: 'red', img: marsImg },
+    { name: 'Jupiter', id: '599', color: 'blue', img: jupiterImg },
+    { name: 'Saturn', id: '699', color: 'purple', img: saturnImg },
+    { name: 'Uranus', id: '799', color: 'silver', img: uranusImg },
+    { name: 'Neptune', id: '899', color: 'pink', img: neptuneImg },
+    { name: 'Pluto', id: '999', color: 'black', img: plutoImg },
   ];
   for (const planet of planets) {
     const planetQueryString = queryString.replace("'199'", `'${planet.id}'`);
@@ -68,13 +88,13 @@ async function getData(latitude, longitude) {
       method: 'GET',
     });
     const data = await response.text();
-    displayData(planetData, planet.name, data, planet.color);
+    displayData(planetData, planet.name, data, planet.color, planet.img);
   } catch (error) {
     console.error(error);
   }
 }
 
-function displayData(planetData, planetName, data, planetColor) {
+function displayData(planetData, planetName, data, planetColor, planetImg) {
   const lines = data.split('$$SOE');
 
   const rightAscensionLine = lines[1].slice(24, 35);
@@ -127,7 +147,8 @@ function displayData(planetData, planetName, data, planetColor) {
   planetData.push({
     bodyName: planetName,
     skyPos: newdegrees,
-    color: planetColor
+    color: planetColor,
+    img: planetImg
   })
 
 
@@ -211,6 +232,7 @@ for (const planet of planetData) {
   ctx.rotate(radians);
   ctx.fillStyle = planet.color;
   ctx.fillRect(150, -10, 20, 20);
+  ctx.drawImage(planet.img, 150, -15, 30, 30)
   ctx.fillText(planet.bodyName, 100, 0)
   ctx.restore();
   //console.log(planetDataPre)
