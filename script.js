@@ -102,8 +102,8 @@ function displayData(planetData, planetName, data, planetColor) {
 
   function convert(x, y, z) {
     if (planetDataPre[0].skyPos > astdegrees) {
-    newdegrees = degrees - (planetData[0].skyPos - astdegrees) 
-    newequinox = vernalEquinox - (planetData[0].skyPos - astdegrees)
+    newdegrees = degrees - (planetDataPre[0].skyPos - astdegrees) 
+    newequinox = vernalEquinox - (planetDataPre[0].skyPos - astdegrees)
       if (newdegrees < 0) {
         newdegrees = newdegrees + 360
       }
